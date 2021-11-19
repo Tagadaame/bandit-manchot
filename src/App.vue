@@ -1,5 +1,5 @@
 <template>
-  <BanditManchot :isWinner="iswinner" />
+  <BanditManchot :isWinner="isWinner" />
   <!--<BanditManchot isWinner="true" />-->
    <Modal ref="modalName">
       <template v-slot:header>
@@ -36,6 +36,7 @@ export default {
       appiswinner: '',
     }
   },
+  //props: {isWinner: Boolean},
   mounted() {  
     window.addEventListener("DOMContentLoaded", () => {
       this.isWinner = window.isWinner;
