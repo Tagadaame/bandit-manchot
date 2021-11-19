@@ -1,5 +1,5 @@
 <template>
-  <div id="container" :class="iswinner ? 'bgWin' : 'bgLoose'">
+  <div id="container" :class="isWinner ? 'bgWin' : 'bgLoose'">
     <header class="intro z2 txt-white">
       <span>TENTEZ VOTRE CHANCE JUSQU'AU 3 DÉCELMBRE 2021</span>
       <p>Pour une fois que <strong>c'est vous le client,</strong>
@@ -17,7 +17,7 @@
         <span>Bonne chance !</span>
       </p>
       <div id="anim" class="z2">
-        <div v-if="iswinner" id="manchot"></div>
+        <div v-if="isWinner" id="manchot"></div>
         <div v-else id="manchot"></div>
       </div>
       <button id="play" class="btn txt-white z2"><span>Je joue !</span></button>
@@ -70,7 +70,7 @@
 
   </Modal>
 
-  <Modal v-if="iswinner" ref="modalResult">
+  <Modal v-if="isWinner" ref="modalResult">
     <template v-slot:header>
       <h1>Félicitations !</h1>
     </template>
@@ -138,11 +138,11 @@ export default {
       path: '',
     }
   },
-  props: {iswinner: Boolean},
+  props: {isWinner: Boolean},
 
   methods: {
     getPath() {
-      if (this.iswinner) {
+      if (this.isWinner) {
         this.path = 'http://www.kb-style.fr/PMC/bandit_manchot_win.json';
       } else {
          this.path = 'http://www.kb-style.fr/PMC/bandit_manchot_lose.json';
@@ -151,7 +151,7 @@ export default {
   },
 
   mounted() {
-    console.log('bandit manchot :', this.iswinner);
+    console.log('bandit manchot :', this.isWinner);
 
     this.getPath();
 

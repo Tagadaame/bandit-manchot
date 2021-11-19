@@ -1,5 +1,5 @@
 <template>
-  <BanditManchot :isWinner="appiswinner" />
+  <BanditManchot :isWinner="iswinner" />
   <!--<BanditManchot isWinner="true" />-->
    <Modal ref="modalName">
       <template v-slot:header>
@@ -33,11 +33,7 @@ export default {
   data() {
     return {
       isWinner: '',
-    }
-  },
-  props: {
-    appiswinner: {
-      type: Boolean
+      appiswinner: '',
     }
   },
   mounted() {  
