@@ -1,5 +1,5 @@
 <template>
-  <div v-if="userCity"  id="container" :class="isWinner === 'true' ? 'bgWin' : 'bgLoose'">
+  <div id="container" v-if="isWinner" :class="isWinner ? 'bgWin' : 'bgLoose'">
     <header class="intro z2 txt-white">
       <span>TENTEZ VOTRE CHANCE JUSQU'AU 3 DÉCELMBRE 2021</span>
       <p>Pour une fois que <strong>c'est vous le client,</strong>
@@ -19,11 +19,11 @@
       <div id="anim" class="z2">
         <div id="manchot"></div>
       </div>
-      <button id="play" class="btn txt-white z2"><span>Je joue !</span></button>
+      <button id="play" @click="clicPlay" class="btn txt-white z2"><span>Je joue !</span></button>
       <!-- <button @click="$refs.modalResult.openModal()">button</button> -->
       <div id="bottom" class="z2 txt-white">
         <label class="checkbox">
-          <input type="checkbox" id="acceptCkeck" />
+          <input type="checkbox" id="acceptCkeck" @change="clicLegals" />
           <svg viewBox="0 0 21 18">
               <symbol id="tick-path" viewBox="0 0 21 18" xmlns="http://www.w3.org/2000/svg">
                   <path d="M5.22003 7.26C5.72003 7.76 7.57 9.7 8.67 11.45C12.2 6.05 15.65 3.5 19.19 1.69" fill="none" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round" />
@@ -69,7 +69,7 @@
 
   </Modal>
 
-  <Modal v-if="isWinner === 'true'" ref="modalResult">
+  <Modal v-if="isWinner" ref="modalResult">
     <template v-slot:header>
       <h2>Félicitations !</h2>
     </template>
@@ -127,7 +127,6 @@
 
 import Modal from "./Modal";
 import lottieWeb from 'lottie-web';
-import axios from "axios";
 
 export default {
   name: "BanditManchot",
@@ -137,94 +136,86 @@ export default {
   data() {
     return {
       path: '',
-      isWinner:null,
-      userCity:null
+      isWinner:'',
+      userCity:'',
+      animation:'
+      
+      ',
     }
   },
   methods: {
     getPath() {
-      if (this.isWinner === 'true') {
-         this.path = 'http://www.kb-style.fr/PMC/bandit_manchot_win.json';
-        //DECOMMENT FOR local this.path = '/templates/banditManchot/lottiefiles/bandit_manchot_win.json';
+      if (this.isWinner) {
+         //COMMENT FOR localthis.path = 'http://www.kb-style.fr/PMC/bandit_manchot_win.json';
+         this.path = '/templates/banditManchot/lottiefiles/bandit_manchot_win.json';
+         return this.path;
       } else {
-        this.path = 'http://www.kb-style.fr/PMC/bandit_manchot_lose.json';
-        //DECOMMENT FOR local this.path = '/templates/banditManchot/lottiefiles/bandit_manchot_lose.json';
+        //COMMENT FOR local this.path = 'http://www.kb-style.fr/PMC/bandit_manchot_lose.json';
+         this.path = '/templates/banditManchot/lottiefiles/bandit_manchot_lose.json';
+         return this.path;
       }
-    }
-  },
+    },
+    clicPlay() {
+      var count = 0;
+      var btnPlay = document.getElementById('play');
+      var acceptCkeck = document.getElementById("acceptCkeck");
+      var animation = lottieWeb.loadAnimation({
+        container: document.getElementById('manchot'),
+        path: this.getPath(),
+        renderer: 'svg',
+        loop: false,
+        autoplay: false,
+        name: "Bandit Manchot",
+      });
+      animation.goToAndStop(0, true); 
+      console.log('clicplay', animation )
 
-  mounted() {
-    this.userCity = document.getElementById("app").getAttribute("usercity");
-    this.isWinner = document.getElementById("app").getAttribute("iswinner");
-
-    console.log('comp bandit manchot isWinner :', typeof this.isWinner);
-    console.log('comp bandit manchot userCity :', typeof this.userCity);
-
-    window.addEventListener("DOMContentLoaded", () => {
-   
-      var that = this    
-      setTimeout(function() {
-
-        that.userCity = document.getElementById("app").getAttribute("usercity");
-        that.isWinner = document.getElementById("app").getAttribute("iswinner");
-        console.log('isWinner build 1 :', that.isWinner);
-        console.log('userCity 1 :', that.userCity);
-    
-        that.getPath();
-
-        var container = document.getElementById('manchot');
-        var btnPlay = document.getElementById('play');
-        var acceptCkeck = document.getElementById("acceptCkeck");
-        var alert = document.getElementById("alert");
+      if (count < 1)  { 
         var bottom = document.getElementById("bottom");
-
-        var animation = lottieWeb.loadAnimation({
-          container: container,
-          path: that.path,
-          renderer: 'svg',
-          loop: false,
-          autoplay: false,
-          name: "Bandit Manchot",
-        });
-
-        animation.goToAndStop(0, true); 
-
-        animation.onComplete = function() {
-          that.$refs.modalResult.openModal()
+        var alert = document.getElementById("alert");
+        if (acceptCkeck.checked == true) {
+          count++;
+          animation.play();
+          console.log('play methode', this.animation )
+          btnPlay.style.visibility = "hidden";
+          document.querySelector("body").classList.add("finish")
+          alert.style.opacity = "0";
+          alert.style.height = "0";
+          bottom.classList.remove("wizz")
+        } else {
+          alert.style.opacity = "1";
+          alert.style.height = "auto";
+          bottom.classList.add("wizz")
         }
+      } 
+      const that = this
+      animation.onComplete = function() {
+        that.$refs.modalResult.openModal()
+      }
+    },
+    clicLegals(event) {
+      var acceptCkeck = document.getElementById("acceptCkeck");
+      var alert = document.getElementById("alert");
+      var bottom = document.getElementById("bottom");
 
-        var count = 0;
+      console.log('event', event);
+      if (acceptCkeck.checked == true) {
+        alert.style.opacity = "0";
+        alert.style.height = "0";
+        bottom.classList.remove("wizz")
+      }
+    },
+  },
+  
+  mounted() {
 
-        btnPlay.addEventListener('click', () => {
-          if (count < 1)  { 
-            if (acceptCkeck.checked == true) {
-              count++;
-              animation.play();
-              btnPlay.style.visibility = "hidden";
-              document.querySelector("body").classList.add("finish")
-              alert.style.opacity = "0";
-              alert.style.height = "0";
-              bottom.classList.remove("wizz")
-            } else {
-              alert.style.opacity = "1";
-              alert.style.height = "auto";
-              bottom.classList.add("wizz")
-            }
-          } 
-        });
+    this.isWinner = document.getElementById("app").getAttribute("iswinner");
+    this.userCity = document.getElementById("app").getAttribute("usercity");
 
-        acceptCkeck.addEventListener('click',() => {
-          if (acceptCkeck.checked == true) {
-            console.log('checked');
-            alert.style.opacity = "0";
-            alert.style.height = "0";
-            bottom.classList.remove("wizz")
-          }
-        });
-      }, 1500) 
-      
-    });
+    console.log('comp bandit manchot isWinner :', this.isWinner);
+    console.log('comp bandit manchot userCity :', this.userCity);
 
+  
   }};
 
 </script>
@@ -279,7 +270,7 @@ export default {
         content: ' ';
         top: 15vh;
         position: absolute;
-        background: url('./../assets/img/etoile.png') no-repeat center transparent;
+        background: url(/img/etoile.png) no-repeat center transparent;
         left: 0;
         right: 0;
         height: 275px;

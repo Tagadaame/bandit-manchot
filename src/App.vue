@@ -1,8 +1,8 @@
 <template>
-  <!-- DECOMMENT for PHP :-->
-  <BanditManchot :isWinner="false" userCity="niort"  />
-  <!-- DECOMMENT for LOCAL :  
-  <BanditManchot isWinner="true" /> -->
+  <!-- deCOMMENT for local :
+  <BanditManchot :isWinner="false" userCity="niort"  />-->
+  <!-- DECOMMENT for PHP : -->
+  <BanditManchot  />
    <Modal ref="modalName">
       <template v-slot:header>
         <h1>Modal title</h1>
@@ -32,21 +32,6 @@ export default {
   components: {
     BanditManchot,
   },
-   data() {
-     return {
-       isWinner: '',
-       userCity: ''
-     }
-   },
-  //props: ["isWinner: ''"],
-  mounted() {
-     window.addEventListener("DOMContentLoaded", () => {
-        console.log('isWinner build 1 :', this.isWinner);
-        this.isWinner = document.getElementById("app").getAttribute("iswinner");
-        console.log('userCity 1 :', this.userCity);
-        this.userCity = document.getElementById("app").getAttribute("usercity");
-     });
-   },
 };
 </script>
 
