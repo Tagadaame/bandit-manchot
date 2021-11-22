@@ -42,32 +42,13 @@
               <path d="M3.49371 4.22065L5.55387 0.79198" />
           </svg>
         </label>
-        <span class="z2 txt-white">J’accepte <a href="#" @click="$refs.modalLegals.openModal()">le réglement</a> du jeu.</span>
+        <span class="z2 txt-white">J’accepte <a href="/jeu/instant-gagnant/reglement" target="_blank">le réglement</a> du jeu.</span>
       </div>
     </div>
     <footer>
       <img src="./../assets/img/footer.png" />
     </footer>
   </div>
-    
-  <Modal id="reglement" ref="modalLegals">
-  
-    <template v-slot:header>
-      <h2>Règlement du jeu</h2>
-    </template>
-
-    <template v-slot:body>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nunc sed velit dignissim sodales ut eu sem integer vitae. Id aliquet lectus proin nibh nisl condimentum. Fringilla urna porttitor rhoncus dolor purus. Nam aliquam sem et tortor. Nisl vel pretium lectus quam id. Cras pulvinar mattis nunc sed. Quis ipsum suspendisse ultrices gravida dictum fusce ut placerat orci. Tristique magna sit amet purus. Fermentum et sollicitudin ac orci phasellus egestas tellus. Erat pellentesque adipiscing commodo elit at imperdiet dui accumsan. Felis eget nunc lobortis mattis aliquam faucibus. Tincidunt eget nullam non nisi est sit amet facilisis. Mi in nulla posuere sollicitudin aliquam ultrices sagittis orci. Vitae proin sagittis nisl rhoncus mattis rhoncus urna neque. Eget nunc scelerisque viverra mauris in aliquam sem fringilla ut. Nec nam aliquam sem et tortor consequat id. Commodo nulla facilisi nullam vehicula ipsum a. Elementum tempus egestas sed sed. Faucibus purus in massa tempor nec feugiat nisl pretium fusce.</p>
-      <p>Arcu cursus vitae congue mauris rhoncus aenean. Tempor id eu nisl nunc mi. Pharetra diam sit amet nisl suscipit adipiscing bibendum. Ut faucibus pulvinar elementum integer enim. Odio facilisis mauris sit amet massa vitae tortor condimentum lacinia. Eu non diam phasellus vestibulum lorem sed risus. Porttitor rhoncus dolor purus non enim praesent. Sit amet mauris commodo quis imperdiet. Lobortis feugiat vivamus at augue eget. Nibh tellus molestie nunc non blandit. Tellus mauris a diam maecenas sed enim ut. Tortor aliquam nulla facilisi cras fermentum odio eu feugiat pretium. Mattis aliquam faucibus purus in massa.</p>
-    </template>
-
-    <template v-slot:footer>
-      <div class="d-flex align-items-center justify-content-between">
-        <button class="btn btn--primary" @click="$refs.modalLegals.closeModal()">J'ai compris</button>
-      </div>
-    </template>
-
-  </Modal>
 
   <Modal v-if="isWinner === 'true'" ref="modalResult">
     <template v-slot:header>
@@ -208,9 +189,9 @@ export default {
               document.querySelector("body").classList.add("finish")
               alert.style.opacity = "0";
               alert.style.height = "0";
-              bottom.classList.remove("wizz")
-              axios.defaults.headers.common['X-CSRF-TOKEN'] = that.csrf;
-              axios.post(that.url, null, {params: {'csrf' : that.csrf}})
+              bottom.classList.remove("wizz");
+              axios.post(that.url, {'csrf':that.csrf});
+
             } else {
               alert.style.opacity = "1";
               alert.style.height = "auto";
