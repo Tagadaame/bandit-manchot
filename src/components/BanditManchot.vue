@@ -72,13 +72,13 @@
 
   <Modal v-if="isWinner" ref="modalResult">
     <template v-slot:header>
-      <h1>Félicitations !</h1>
+      <h2>Félicitations !</h2>
     </template>
 
     <template v-slot:body>
-      <img class="boncado" src="./../assets/img/bon-cadeau50.png" />
+      <div class="boncado"></div>
       <h3>Vous avez gagné un bon d’achat d’une valeur de 50€ </h3>
-      <p><strong>Ce bon d’achat est à utiliser dans votre magasin Promocash [VILLE]</strong></p>
+      <p><strong>Ce bon d’achat est à utiliser dans votre magasin Promocash {{ userCity }} </strong></p>
       <p>Le bon d’achat sera disponible dès demain 
         en caisse et jusqu’au 31 décembre 2021, 
         utilisable à partir de 250€ d’achats. 
@@ -93,6 +93,7 @@
       </div>-->
     </template>
   </Modal>
+
   <Modal v-else ref="modalResult">
     <template v-slot:header>
       <h2>Perdu !</h2>
@@ -100,7 +101,7 @@
 
     <template v-slot:body>
       <h3>Malheureusement, vous n’avez pas gagné mais tout peut encore arriver !</h3>
-      <p>Si vous réalisez à nouveau un chariot de 150€ minimum dans votre magasin [VILLE] 
+      <p>Si vous réalisez à nouveau un chariot de 150€ minimum dans votre magasin {{ userCity }} 
         d’ici le 30 novembre, vous recevrez un deuxième email pour participer une seconde fois au tirage au sort et tenter de gagner un bon d’achat.
         Nous vous remercions de votre fidélité ! 
       </p>
@@ -138,20 +139,22 @@ export default {
       path: '',
     }
   },
-  props: {isWinner: Boolean},
-
+  props: ['isWinner', 'userCity'],
   methods: {
     getPath() {
       if (this.isWinner) {
-        this.path = 'http://www.kb-style.fr/PMC/bandit_manchot_win.json';
+         this.path = 'http://www.kb-style.fr/PMC/bandit_manchot_win.json';
+        //DECOMMENT FOR local this.path = '/templates/banditManchot/lottiefiles/bandit_manchot_win.json';
       } else {
-         this.path = 'http://www.kb-style.fr/PMC/bandit_manchot_lose.json';
+        this.path = 'http://www.kb-style.fr/PMC/bandit_manchot_lose.json';
+        //DECOMMENT FOR local this.path = '/templates/banditManchot/lottiefiles/bandit_manchot_lose.json';
       }
     }
   },
 
   mounted() {
-    console.log('bandit manchot :', this.isWinner);
+    console.log('comp bandit manchot isWinner :', this.isWinner);
+    console.log('comp bandit manchot userCity :', this.userCity);
 
     this.getPath();
 
@@ -255,6 +258,19 @@ export default {
       display: flex;
       flex-direction: column;
       transition: all 0.2s easeIn;
+       &:before {
+        z-index: 1;
+        content: ' ';
+        top: 15vh;
+        position: absolute;
+        background: url(/img/etoile.png) no-repeat center transparent;
+        left: 0;
+        right: 0;
+        height: 275px;
+        width: 325px;
+        margin-left: -162px;
+        left: 50%;
+      }   
       &.finish.bgWin {
         background:radial-gradient(circle, rgba(201,36,57,1) 80%, rgba(155,10,28,1) 100%) no-repeat center center, url('./../assets/img/bg.png') no-repeat center center;
         background-size: cover;
@@ -312,7 +328,7 @@ export default {
       align-items: center;
       justify-content: center;
       margin: auto;
-      max-width: 100%;    
+      max-width: 100%; 
       &:after {
         z-index: 1;
         content:' ';
@@ -336,9 +352,9 @@ export default {
       font-size: 0.85rem;
       span {
         display: block;
-        font-size: 1.35rem;
+        font-size: 1.5rem;
         margin-top: 0.3rem;
-        font-family: 'Tahu! Regular', Arial;
+        font-family: 'tahuregular';
       }
     }
     #anim {
@@ -429,6 +445,14 @@ export default {
       font-size: 2.75rem;
       font-weight: normal;
       margin: 1.5rem auto 1rem;
+      &:after {
+        content: '';
+        width: 2px;
+        height: 15px;
+        display: block;
+        background: #C92439; 
+        margin: 5px auto 0px;
+      }
     }
     h3 {
       font-size: 16px;
@@ -438,8 +462,11 @@ export default {
   .modal__body {
     text-align: center;
     .boncado {
-      width: 179px;
-      margin: auto;
+      width: 183px;
+      height: 84px;
+      margin: 0px auto;
+      background: url('./../assets/img/bon-cadeau50.jpg') no-repeat center center transparent;
+      background-size: contain;
     }
   }
 

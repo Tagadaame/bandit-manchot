@@ -3,9 +3,5 @@ import App from './App.vue'
 
 createApp(App).mount('#app')
 
-
-
-// NO VUE
-
-
+//createApp().component('app', App).mount('#app') 
 
