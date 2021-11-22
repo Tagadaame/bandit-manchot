@@ -127,7 +127,7 @@
 
 import Modal from "./Modal";
 import lottieWeb from 'lottie-web';
-import axios from "axios";
+import axios from 'axios';
 
 export default {
   name: "BanditManchot",
@@ -138,17 +138,19 @@ export default {
     return {
       path: '',
       isWinner:null,
-      userCity:null
+      userCity:null,
+      csrf:'',
+      url:''
     }
   },
   methods: {
     getPath() {
       if (this.isWinner === 'true') {
-         this.path = 'http://www.kb-style.fr/PMC/bandit_manchot_win.json';
-        //DECOMMENT FOR local this.path = '/templates/banditManchot/lottiefiles/bandit_manchot_win.json';
+         //DECOMMENT FOR local this.path = 'http://www.kb-style.fr/PMC/bandit_manchot_win.json';
+         this.path = '/templates/banditManchot/lottiefiles/bandit_manchot_win.json';
       } else {
-        this.path = 'http://www.kb-style.fr/PMC/bandit_manchot_lose.json';
-        //DECOMMENT FOR local this.path = '/templates/banditManchot/lottiefiles/bandit_manchot_lose.json';
+        //DECOMMENT FOR local this.path = 'http://www.kb-style.fr/PMC/bandit_manchot_lose.json';
+         this.path = '/templates/banditManchot/lottiefiles/bandit_manchot_lose.json';
       }
     }
   },
@@ -156,9 +158,9 @@ export default {
   mounted() {
     this.userCity = document.getElementById("app").getAttribute("usercity");
     this.isWinner = document.getElementById("app").getAttribute("iswinner");
+    this.csrf = document.getElementById("app").getAttribute("csrf");
+    this.url = document.getElementById("app").getAttribute("url");
 
-    console.log('comp bandit manchot isWinner :', typeof this.isWinner);
-    console.log('comp bandit manchot userCity :', typeof this.userCity);
 
     window.addEventListener("DOMContentLoaded", () => {
    
@@ -167,8 +169,9 @@ export default {
 
         that.userCity = document.getElementById("app").getAttribute("usercity");
         that.isWinner = document.getElementById("app").getAttribute("iswinner");
-        console.log('isWinner build 1 :', that.isWinner);
-        console.log('userCity 1 :', that.userCity);
+        that.csrf = document.getElementById("app").getAttribute("csrf");
+        that.url = document.getElementById("app").getAttribute("url");
+
     
         that.getPath();
 
@@ -190,7 +193,8 @@ export default {
         animation.goToAndStop(0, true); 
 
         animation.onComplete = function() {
-          that.$refs.modalResult.openModal()
+          that.$refs.modalResult.openModal();
+          bottom.style.opacity = "0";
         }
 
         var count = 0;
@@ -205,6 +209,8 @@ export default {
               alert.style.opacity = "0";
               alert.style.height = "0";
               bottom.classList.remove("wizz")
+              axios.defaults.headers.common['X-CSRF-TOKEN'] = that.csrf;
+              axios.post(that.url, null, {params: {'csrf' : that.csrf}})
             } else {
               alert.style.opacity = "1";
               alert.style.height = "auto";
